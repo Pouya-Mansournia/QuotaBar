@@ -30,6 +30,15 @@ The bridge is installed but has not been run yet. Send a message in Claude Code 
 - The status line is part of the terminal CLI. The VS Code extension's chat panel does not run it, so usage from extension-only sessions is not captured. Running `claude` once in a terminal (the integrated terminal counts) updates the values.
 - Check that `statusLine` in `~/.claude/settings.json` still points at `quotabar-statusline.sh`. A project-level `.claude/settings.json` with its own `statusLine` overrides it for that project.
 
+**Installing Claude Code for the first time**
+The welcome window has a **Copy Command** button. Pasted into Terminal, it runs Anthropic's installer, adds `~/.local/bin` to `PATH` in `~/.zshrc` (the installer puts `claude` there, and a new shell does not find it otherwise), and starts `claude` so you can sign in. The same by hand:
+
+```sh
+curl -fsSL https://claude.ai/install.sh | bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+claude
+```
+
 **"Claude Code not installed"**
 QuotaBar could not find `claude` in the standard directories or through your login shell. Confirm `which claude` works in a new terminal window.
 

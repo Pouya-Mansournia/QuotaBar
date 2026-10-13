@@ -6,10 +6,26 @@ struct SetupView: View {
     @Environment(AppEnvironment.self) private var environment
     @Environment(\.dismiss) private var dismiss
 
-    @State private var claudeSignedIn = KeychainReader.hasClaudeCodeSignIn()
+    @State private var claudeSignedIn: Bool
     @State private var isConnecting = false
 
+    /// - Parameter claudeSignedIn: Overrides detection, for previews and screenshots.
+    init(claudeSignedIn: Bool? = nil) {
+        _claudeSignedIn = State(initialValue: claudeSignedIn ?? KeychainReader.hasClaudeCodeSignIn())
+    }
+
+    @State private var didCopy = false
+
     private static let claudeCodeSetupURL = URL(string: "https://code.claude.com/docs/en/setup")!
+
+    /// Anthropic's installer, then `~/.local/bin` on PATH (where it installs
+    /// `claude`; a fresh shell does not have it), then `claude` to sign in.
+    static let installCommand = """
+    curl -fsSL https://claude.ai/install.sh | bash; \
+    export PATH="$HOME/.local/bin:$PATH"; \
+    grep -q '.local/bin' ~/.zshrc 2>/dev/null || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc; \
+    claude
+    """
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -34,6 +50,9 @@ struct SetupView: View {
             }
 
             HStack {
+                Text(AppCredit.text)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
                 Spacer()
                 Button("Done") {
                     environment.settings.hasCompletedSetup = true
@@ -75,19 +94,41 @@ struct SetupView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             } else {
-                Text("""
-                QuotaBar reads Claude usage through Claude Code. It is not signed in on this Mac yet. \
-                Install Claude Code and sign in once with the same account you use on claude.ai; your \
-                usage from the Claude app and website is included.
-                """)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-                HStack {
-                    Button("Open Install Guide") { NSWorkspace.shared.open(Self.claudeCodeSetupURL) }
-                    Button("Check Again") { claudeSignedIn = KeychainReader.hasClaudeCodeSignIn() }
-                }
+                installSteps
             }
         }
+    }
+
+    /// For people who have never used Claude Code: four steps, one paste.
+    private var installSteps: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("One-time setup. QuotaBar reads your usage through Claude Code, which is not on this Mac yet. Usage from the Claude app and website is included.")
+                .foregroundStyle(.secondary)
+
+            Label("Copy the setup command.", systemImage: "1.circle")
+            HStack {
+                Button(didCopy ? "Copied" : "Copy Command") {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(Self.installCommand, forType: .string)
+                    didCopy = true
+                }
+                Button("Open Terminal") {
+                    NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Utilities/Terminal.app"))
+                }
+            }
+            .padding(.leading, 24)
+
+            Label("In Terminal, press ⌘V, then Return. Wait for it to finish.", systemImage: "2.circle")
+            Label("Sign in with your Claude account when the browser opens.", systemImage: "3.circle")
+            Label("Come back here and click Check Again.", systemImage: "4.circle")
+            HStack {
+                Button("Check Again") { claudeSignedIn = KeychainReader.hasClaudeCodeSignIn() }
+                Button("Install Guide") { NSWorkspace.shared.open(Self.claudeCodeSetupURL) }
+                    .buttonStyle(.link)
+            }
+            .padding(.leading, 24)
+        }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     /// Shown before the system dialog, which gives no context of its own.

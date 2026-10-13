@@ -43,7 +43,7 @@ The app is signed ad hoc ("Sign to Run Locally"), so no Apple developer account 
 
 ## Install from the disk image
 
-`make dmg` builds `build/QuotaBar-<version>.dmg`. To install from it:
+`make dmg` builds `QuotaBar-<version>.dmg` in the project root (ignored by git). To install from it:
 
 1. Open the disk image and drag **QuotaBar** to **Applications**.
 2. Open QuotaBar. macOS blocks it the first time, because the build is not notarized by Apple.

@@ -42,7 +42,7 @@ clean:
 
 # Disk image for sharing. Ad hoc signed and not notarized: see README.
 VERSION := $(shell sed -n 's/.*MARKETING_VERSION = \(.*\);/\1/p' QuotaBar.xcodeproj/project.pbxproj | head -1)
-DMG := build/QuotaBar-$(VERSION).dmg
+DMG := QuotaBar-$(VERSION).dmg
 
 .PHONY: dmg
 dmg: release

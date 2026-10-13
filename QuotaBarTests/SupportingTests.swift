@@ -174,3 +174,14 @@ final class HistoryStoreTests: XCTestCase {
         XCTAssertEqual(samples.map(\.usedPercentage), [0])
     }
 }
+
+@MainActor
+final class SetupTests: XCTestCase {
+    func testInstallCommandIsOnePastableLine() {
+        let command = SetupView.installCommand
+        XCTAssertFalse(command.contains("\n"), "A line break would run the command early when pasted")
+        XCTAssertTrue(command.hasPrefix("curl -fsSL https://claude.ai/install.sh | bash;"))
+        XCTAssertTrue(command.contains(#"export PATH="$HOME/.local/bin:$PATH";"#))
+        XCTAssertTrue(command.hasSuffix("claude"))
+    }
+}

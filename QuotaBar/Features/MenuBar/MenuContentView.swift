@@ -90,7 +90,13 @@ struct MenuContentView: View {
                 .keyboardShortcut("q")
             }
             .padding(.horizontal, 6)
-            .padding(.bottom, 6)
+
+            Text(AppCredit.text)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .frame(maxWidth: .infinity)
+                .padding(.top, 4)
+                .padding(.bottom, 8)
         }
     }
 
@@ -116,6 +122,10 @@ struct MenuContentView: View {
         }
         return "Updated \(formatter.ago(lastRefresh, now: now))"
     }
+}
+
+enum AppCredit {
+    static let text = "Engineered By P.Mansournia"
 }
 
 /// A full-width button that highlights on hover, like a menu item.

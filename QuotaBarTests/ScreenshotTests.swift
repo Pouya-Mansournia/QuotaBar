@@ -57,6 +57,10 @@ final class ScreenshotTests: XCTestCase {
             appearance: .aqua, to: "setup.png"
         )
         try render(
+            SetupView(claudeSignedIn: false).environment(AppEnvironment(paths: fresh.paths, defaults: freshDefaults)),
+            appearance: .aqua, to: "setup-install.png"
+        )
+        try render(
             ProviderSettingsTab(provider: .claude).environment(environment).frame(width: 500),
             appearance: .aqua, to: "settings-claude.png"
         )
