@@ -26,6 +26,12 @@ struct QuotaBarApp: App {
                 .environment(environment)
         }
 
+        Window("Welcome to QuotaBar", id: WindowID.setup) {
+            SetupView()
+                .environment(environment)
+        }
+        .windowResizability(.contentSize)
+
         Window("Usage History", id: WindowID.history) {
             HistoryView()
                 .environment(environment)
@@ -37,4 +43,5 @@ struct QuotaBarApp: App {
 
 enum WindowID {
     static let history = "history"
+    static let setup = "setup"
 }

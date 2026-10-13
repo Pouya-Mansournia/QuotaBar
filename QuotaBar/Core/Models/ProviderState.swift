@@ -52,7 +52,7 @@ enum ProviderError: Error, Equatable, Sendable {
         case .authenticationRequired(let tool): "\(tool) authentication unavailable"
         case .sessionExpired(let tool): "\(tool) sign-in expired — open \(tool) to renew it"
         case .noUsageData(let hint): hint
-        case .permissionDenied(let path): path == "Keychain" ? "Keychain access was not allowed" : "Permission denied"
+        case .permissionDenied(let path): path == "Keychain" ? "QuotaBar wasn't allowed to read your Claude sign-in" : "Permission denied"
         case .networkUnavailable: "Network unavailable"
         case .unsupportedResponse: "Unsupported provider response"
         case .timedOut: "Unable to read usage (timed out)"

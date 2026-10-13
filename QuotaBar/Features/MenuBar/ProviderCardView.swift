@@ -8,6 +8,8 @@ struct ProviderCardView: View {
     let showIcon: Bool
     let showWeekly: Bool
     let showCountdown: Bool
+    /// Optional one-click fix shown under an error, e.g. "Set Up Claude…".
+    var action: (title: String, perform: () -> Void)?
 
     private let formatter = ResetFormatter()
     /// Readings older than this get an explicit age, even when the refresh succeeded.
@@ -23,6 +25,10 @@ struct ProviderCardView: View {
                 freshness(of: usage)
             } else {
                 unavailable
+            }
+            if let action {
+                Button(action.title, action: action.perform)
+                    .controlSize(.small)
             }
         }
         .padding(.horizontal, 14)

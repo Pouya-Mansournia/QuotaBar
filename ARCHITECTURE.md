@@ -38,7 +38,7 @@ QuotaBar/
 │   ├── OpenAI/         provider, parser, models, session locator
 │   └── Mock/           Debug-only sample data
 ├── CLI/            CLILocator, CLIExecutor
-├── Features/       MenuBar, Settings, History, Diagnostics
+├── Features/       MenuBar, Setup (first run), Settings, History, Diagnostics
 └── Resources/      asset catalog (app icon)
 QuotaBarTests/      unit tests, hosted by the app
 Scripts/            generate-icon.swift

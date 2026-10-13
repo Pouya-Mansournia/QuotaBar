@@ -49,6 +49,7 @@ enum MenuBarTitle {
 
 struct MenuBarLabel: View {
     @Environment(AppEnvironment.self) private var environment
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         let now = Date()
@@ -69,6 +70,12 @@ struct MenuBarLabel: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel(highest: highest))
+        // The label is the only view alive at launch, so it opens first-run setup.
+        .task {
+            guard !AppEnvironment.isRunningTests, !settings.hasCompletedSetup else { return }
+            openWindow(id: WindowID.setup)
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 
     private func accessibilityLabel(highest: Double?) -> String {

@@ -34,6 +34,18 @@ struct KeychainReader: ClaudeCredentialProviding {
         return try Self.parseCredential(data)
     }
 
+    /// Whether Claude Code has stored a sign-in on this Mac. Asks only for the
+    /// item's attributes, not its contents, so macOS shows no dialog.
+    static func hasClaudeCodeSignIn() -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: claudeCodeService,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecReturnAttributes as String: true,
+        ]
+        return SecItemCopyMatching(query as CFDictionary, nil) == errSecSuccess
+    }
+
     static func genericPassword(service: String) throws -> Data {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,

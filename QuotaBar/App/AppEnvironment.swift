@@ -72,6 +72,14 @@ final class AppEnvironment {
         }
     }
 
+    /// Switches Claude to the account source and tries it straight away.
+    /// Also used to ask for Keychain access again after it was declined.
+    func connectClaudeAccount() async {
+        settings.claudeUseAccountAPI = true
+        await claudeAccountSource.reset()
+        await store.refresh()
+    }
+
     func dataSource(for provider: AIProvider) -> String {
         Self.makeProviders(settings: settings, paths: paths, bridge: bridge, locator: locator, accountSource: claudeAccountSource)
             .first { $0.provider == provider }?

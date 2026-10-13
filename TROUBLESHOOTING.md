@@ -7,8 +7,8 @@ Start with **Settings → Advanced → Provider refresh test**. It refreshes eve
 **I use the VS Code extension and Claude never shows data**
 The extension does not run a status line. Turn on **Settings → Claude → Read usage from my Anthropic account** and click **Allow** (or **Always Allow**) in the macOS Keychain dialog.
 
-**"Keychain access was not allowed"**
-The Keychain dialog was declined. Switch the account setting off and on to be asked again.
+**"QuotaBar wasn't allowed to read your Claude sign-in"**
+The macOS password dialog was cancelled or declined. Click **Allow Access…** in the menu, type the password you use to unlock the Mac, and choose **Always Allow**.
 
 **"Claude Code sign-in expired — open Claude Code to renew it"**
 Claude Code renews its own session when it runs. Send one message in Claude Code, then press Refresh.
@@ -19,8 +19,8 @@ Anthropic changed the response of the usage endpoint. Export diagnostics (it lis
 **The Keychain dialog comes back after every rebuild**
 "Always Allow" is tied to the app's code signature, which changes with each ad hoc build. A build signed with a Developer ID keeps the approval.
 
-**"Enable the status line bridge in Settings"**
-Open Settings → Claude and press **Install**.
+**"Claude isn't connected yet"**
+Click **Set Up Claude…** in the menu and follow the window. Or, for the source without credentials, open Settings → Claude and press **Install** next to Status line bridge.
 
 **"Waiting for Claude Code — send a message in a terminal session"**
 The bridge is installed but has not been run yet. Send a message in Claude Code in a terminal. Claude Code sends rate limits only after the first response of a session.

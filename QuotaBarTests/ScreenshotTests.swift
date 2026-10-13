@@ -47,6 +47,15 @@ final class ScreenshotTests: XCTestCase {
         for (appearance, suffix) in [(NSAppearance.Name.aqua, "light"), (.darkAqua, "dark")] {
             try render(MenuContentView().environment(environment), appearance: appearance, to: "menu-\(suffix).png")
         }
+        // Setup is shown before anything is connected, so use an environment without mock data.
+        let fresh = try TemporaryDirectory()
+        let freshSuite = "QuotaBarScreenshots-\(UUID().uuidString)"
+        let freshDefaults = try XCTUnwrap(UserDefaults(suiteName: freshSuite))
+        defer { freshDefaults.removePersistentDomain(forName: freshSuite) }
+        try render(
+            SetupView().environment(AppEnvironment(paths: fresh.paths, defaults: freshDefaults)),
+            appearance: .aqua, to: "setup.png"
+        )
         try render(
             ProviderSettingsTab(provider: .claude).environment(environment).frame(width: 500),
             appearance: .aqua, to: "settings-claude.png"

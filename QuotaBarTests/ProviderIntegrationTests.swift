@@ -183,7 +183,7 @@ final class ClaudeUsageProviderTests: XCTestCase {
     }
 
     func testBridgeNotInstalled() async {
-        await assertError(provider(), .notConfigured("Enable the status line bridge in Settings"))
+        await assertError(provider(), .notConfigured("Claude isn't connected yet"))
     }
 
     func testWaitingForFirstSnapshot() async throws {

@@ -76,6 +76,8 @@ final class AppSettings {
     var debugLogging: Bool { didSet { defaults.set(debugLogging, forKey: Key.debugLogging) } }
     /// Opt-in: read Claude usage from the Anthropic account endpoint.
     var claudeUseAccountAPI: Bool { didSet { defaults.set(claudeUseAccountAPI, forKey: Key.claudeUseAccountAPI) } }
+    /// False until the first-run setup window has been dismissed.
+    var hasCompletedSetup: Bool { didSet { defaults.set(hasCompletedSetup, forKey: Key.hasCompletedSetup) } }
     /// Only honoured in DEBUG builds; see `AppEnvironment`.
     var mockMode: Bool { didSet { defaults.set(mockMode, forKey: Key.mockMode) } }
 
@@ -98,6 +100,7 @@ final class AppSettings {
         historyRetention = (defaults.object(forKey: Key.historyRetention) as? Int).flatMap(HistoryRetention.init) ?? .week
         debugLogging = defaults.bool(forKey: Key.debugLogging)
         claudeUseAccountAPI = defaults.bool(forKey: Key.claudeUseAccountAPI)
+        hasCompletedSetup = defaults.bool(forKey: Key.hasCompletedSetup)
         mockMode = defaults.bool(forKey: Key.mockMode)
         disabledProviders = Set(defaults.stringArray(forKey: Key.disabledProviders) ?? [])
         thresholdsByProvider = defaults.dictionary(forKey: Key.thresholds) as? [String: [Int]] ?? [:]
@@ -145,6 +148,7 @@ final class AppSettings {
         static let historyRetention = "historyRetention"
         static let debugLogging = "debugLogging"
         static let claudeUseAccountAPI = "claudeUseAccountAPI"
+        static let hasCompletedSetup = "hasCompletedSetup"
         static let mockMode = "mockMode"
         static let disabledProviders = "disabledProviders"
         static let thresholds = "thresholdsByProvider"

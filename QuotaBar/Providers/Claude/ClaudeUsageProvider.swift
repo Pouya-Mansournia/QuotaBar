@@ -29,7 +29,7 @@ struct ClaudeUsageProvider: UsageProvider {
             guard await locator.locate(provider.cliName) != nil else {
                 throw ProviderError.cliNotInstalled(tool: "Claude Code")
             }
-            throw ProviderError.notConfigured("Enable the status line bridge in Settings")
+            throw ProviderError.notConfigured("Claude isn't connected yet")
         }
 
         let snapshot = paths.claudeSnapshotFile

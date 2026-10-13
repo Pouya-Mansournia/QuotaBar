@@ -54,7 +54,8 @@ struct MenuContentView: View {
                     now: now,
                     showIcon: settings.showProviderIcons,
                     showWeekly: settings.showWeeklyQuota,
-                    showCountdown: settings.showResetCountdown
+                    showCountdown: settings.showResetCountdown,
+                    action: action(for: provider, snapshot: store.snapshot(for: provider))
                 )
                 Divider()
             }
@@ -90,6 +91,22 @@ struct MenuContentView: View {
             }
             .padding(.horizontal, 6)
             .padding(.bottom, 6)
+        }
+    }
+
+    /// A one-click way out of the two Claude states people get stuck in.
+    private func action(for provider: AIProvider, snapshot: ProviderSnapshot) -> (title: String, perform: () -> Void)? {
+        guard provider == .claude, !environment.isMockModeActive, let error = snapshot.lastError else { return nil }
+        switch error {
+        case .permissionDenied(path: "Keychain"):
+            return ("Allow Access…", { Task { await environment.connectClaudeAccount() } })
+        case .notConfigured, .authenticationRequired, .cliNotInstalled:
+            return ("Set Up Claude…", {
+                openWindow(id: WindowID.setup)
+                NSApp.activate(ignoringOtherApps: true)
+            })
+        default:
+            return nil
         }
     }
 

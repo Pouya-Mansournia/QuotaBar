@@ -57,7 +57,9 @@ To ship without that step, set your team in the target's Signing settings, sign 
 
 **Codex** works as soon as the Codex CLI has been used on this Mac.
 
-**Claude** has two sources. Pick one in **Settings → Claude**:
+The first launch opens a welcome window with a **Connect Claude** button. It explains the one macOS password dialog before it appears. That is all most people need.
+
+**Claude** has two sources. To switch later, use **Settings → Claude**:
 
 - **Read usage from my Anthropic account.** Shows the same numbers as Claude Code's Account & Usage panel and works with the VS Code extension. macOS asks you to let QuotaBar read Claude Code's sign-in from the Keychain.
 - **Status line bridge → Install.** No credentials and no network, but it updates only while Claude Code runs in a terminal. Send one message there after installing.

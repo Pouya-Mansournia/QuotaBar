@@ -216,6 +216,6 @@ final class ClaudeAccountUsageSourceTests: XCTestCase {
 
     func testErrorMessages() {
         XCTAssertEqual(ProviderError.sessionExpired(tool: "Claude Code").connectionState, .authenticationRequired)
-        XCTAssertEqual(ProviderError.permissionDenied(path: "Keychain").userMessage, "Keychain access was not allowed")
+        XCTAssertEqual(ProviderError.permissionDenied(path: "Keychain").userMessage, "QuotaBar wasn't allowed to read your Claude sign-in")
     }
 }
