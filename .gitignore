@@ -10,3 +10,4 @@ Windows/**/bin/
 Windows/**/obj/
 Windows/publish/
 *.user
+Windows/installer/Output/

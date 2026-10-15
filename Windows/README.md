@@ -25,6 +25,16 @@ dotnet publish QuotaBar.Windows -c Release -r win-x64 --self-contained -p:Publis
 
 The last command produces a single `publish\QuotaBar.exe` that runs without .NET installed. Copy it anywhere, run it, and turn on **Settings → Launch at login**.
 
+## Installer
+
+`installer/QuotaBar.iss` builds `installer/Output/QuotaBar-Setup-<version>.exe` with [Inno Setup 6](https://jrsoftware.org/isinfo.php). It installs per user (no administrator rights) to `%LOCALAPPDATA%\Programs\QuotaBar`, adds a Start Menu shortcut and an uninstaller, and offers to start QuotaBar at sign-in. Run the `dotnet publish` command above first, then:
+
+```powershell
+ISCC.exe Windows\installer\QuotaBar.iss
+```
+
+The installer is not code-signed, so SmartScreen may show "Windows protected your PC" the first time: click **More info → Run anyway**.
+
 ## Data sources
 
 **Claude, account source (default).** On Windows, Claude Code keeps its sign-in in `%USERPROFILE%\.claude\.credentials.json` instead of a keychain, so no permission dialog is needed. QuotaBar reads the access token from that file and sends one GET request to `https://api.anthropic.com/api/oauth/usage`, at most every two minutes. The token goes nowhere else, is never written or logged, and is never refreshed by QuotaBar (Claude Code renews it itself). Works with the VS Code extension too. The endpoint is not officially documented, so an unrecognised response is shown as "Unsupported provider response", never as a guess.
