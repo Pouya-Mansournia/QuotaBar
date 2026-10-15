@@ -4,3 +4,9 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 *.dmg
+
+# Windows (.NET)
+Windows/**/bin/
+Windows/**/obj/
+Windows/publish/
+*.user

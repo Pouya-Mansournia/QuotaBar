@@ -15,7 +15,11 @@ The screenshots show Debug-only mock data (hence the MOCK badge). They are regen
 - Local usage history with a chart
 - Local by default: no sign-in, and no credentials or network access unless you turn on the Anthropic account source
 
-## Requirements
+## Windows
+
+A Windows version (tray icon, flyout panel and a draggable desktop widget) lives in [Windows/](Windows/README.md). Build it with the .NET 8 SDK: `cd Windows && dotnet run --project QuotaBar.Windows`.
+
+## Requirements (macOS)
 
 - macOS 14 or later (Apple Silicon and Intel)
 - Xcode 16 or later to build

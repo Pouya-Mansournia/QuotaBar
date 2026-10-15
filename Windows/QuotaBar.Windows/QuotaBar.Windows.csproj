@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>QuotaBar</RootNamespace>
+    <AssemblyName>QuotaBar</AssemblyName>
+    <Version>1.0.0</Version>
+    <Product>QuotaBar</Product>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationIcon>QuotaBar.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="QuotaBar.Windows.Tests" />
+  </ItemGroup>
+
+</Project>

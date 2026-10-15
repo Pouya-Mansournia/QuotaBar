@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuotaBar.Windows", "QuotaBar.Windows\QuotaBar.Windows.csproj", "{C70684A1-38ED-40EF-B8E7-F1E3021CEEAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuotaBar.Windows.Tests", "QuotaBar.Windows.Tests\QuotaBar.Windows.Tests.csproj", "{DDAED390-E3EA-4587-937C-A36546058C91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C70684A1-38ED-40EF-B8E7-F1E3021CEEAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70684A1-38ED-40EF-B8E7-F1E3021CEEAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70684A1-38ED-40EF-B8E7-F1E3021CEEAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70684A1-38ED-40EF-B8E7-F1E3021CEEAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDAED390-E3EA-4587-937C-A36546058C91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDAED390-E3EA-4587-937C-A36546058C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDAED390-E3EA-4587-937C-A36546058C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDAED390-E3EA-4587-937C-A36546058C91}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
