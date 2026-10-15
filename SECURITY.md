@@ -82,7 +82,7 @@ The Windows app (`Windows/`) follows the same rules, with these differences:
 
 - **Credential read:** Claude Code on Windows stores its sign-in in `%USERPROFILE%\.claude\.credentials.json` instead of a keychain, so there is no consent dialog and the account source is **on by default**. QuotaBar opens that file read-only and uses only `accessToken` and `expiresAt`. Turn the account source off in Settings to make the app fully local.
 - **Network:** the same single request to `https://api.anthropic.com/api/oauth/usage`, at most every two minutes, with no cookies. Nothing else uses the network.
-- **Files written:** `%APPDATA%\QuotaBar\` — `settings.json`, `notification-state.json`, and for the bridge `claude-statusline.json`, `quotabar-statusline.ps1`, `statusline-chain-command`, `statusline-original.json`. Launch at login writes one value, `QuotaBar`, under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
+- **Files written:** `%APPDATA%\QuotaBar\`: `settings.json`, `notification-state.json`, and for the bridge `claude-statusline.json`, `quotabar-statusline.ps1`, `statusline-chain-command`, `statusline-original.json`. Launch at login writes one value, `QuotaBar`, under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
 - **Bridge script:** Windows PowerShell; it keeps only `rate_limits` and runs your previous status line command with the original payload. Install/Remove edit `~/.claude/settings.json` with the same backup and restore behaviour as on macOS.
 - **Installer:** per-user, no administrator rights. Uninstalling leaves `%APPDATA%\QuotaBar` in place so an installed bridge keeps working; remove the bridge in Settings first for a clean uninstall.
 

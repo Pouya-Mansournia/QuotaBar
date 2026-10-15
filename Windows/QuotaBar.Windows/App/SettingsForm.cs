@@ -94,6 +94,20 @@ public sealed class SettingsForm : Form
         buttons.Controls.Add(save);
         if (!firstRun) buttons.Controls.Add(cancel);
         layout.Controls.Add(buttons);
+
+        var about = new LinkLabel
+        {
+            Text = $"QuotaBar {AppInfo.Version} · Engineered by P.Mansournia · Open source on GitHub",
+            AutoSize = true,
+            Margin = new Padding(0, 12, 0, 0),
+            ForeColor = theme.Secondary,
+            LinkColor = Theme.Accent,
+            ActiveLinkColor = Theme.Accent,
+            VisitedLinkColor = Theme.Accent,
+        };
+        about.Links.Add(about.Text.IndexOf("Open source", StringComparison.Ordinal), "Open source on GitHub".Length, AppInfo.RepositoryUrl);
+        about.LinkClicked += (_, e) => AppInfo.Open((string)e.Link!.LinkData!);
+        layout.Controls.Add(about);
         AcceptButton = save;
         CancelButton = firstRun ? save : cancel;
         save.Click += (_, _) => Save();

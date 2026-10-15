@@ -1,6 +1,6 @@
 # QuotaBar
 
-**See how much of your Claude and Codex usage limits you have left — from the macOS menu bar or the Windows taskbar, without opening a terminal or a dashboard.**
+**See how much of your Claude and Codex usage limits you have left, right from the macOS menu bar or the Windows taskbar, without opening a terminal or a dashboard.**
 
 [![CI](https://github.com/Pouya-Mansournia/QuotaBar/actions/workflows/ci.yml/badge.svg)](https://github.com/Pouya-Mansournia/QuotaBar/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -19,11 +19,11 @@ QuotaBar shows the 5-hour and weekly usage limits of **Claude Code** and the **C
 
 ## Screenshots
 
-| macOS — light | macOS — dark |
+| macOS (light) | macOS (dark) |
 | --- | --- |
 | ![QuotaBar menu on macOS, light mode](docs/menu-light.png) | ![QuotaBar menu on macOS, dark mode](docs/menu-dark.png) |
 
-| Windows — panel | Windows — desktop widget |
+| Windows panel | Windows desktop widget |
 | --- | --- |
 | ![QuotaBar flyout panel on Windows with Claude and Codex usage](docs/windows-panel.png) | ![QuotaBar desktop widget on Windows](docs/windows-widget.png) |
 
@@ -33,7 +33,7 @@ The macOS screenshots show Debug-only mock data (hence the MOCK badge) and are r
 
 | Platform | Get it |
 | --- | --- |
-| **Windows 10 / 11** | [QuotaBar-Setup-1.0.0.exe](https://github.com/Pouya-Mansournia/QuotaBar/releases/tag/Windows-version) — per-user install, no admin rights |
+| **Windows 10 / 11** | [QuotaBar-Setup-1.0.1.exe](https://github.com/Pouya-Mansournia/QuotaBar/releases/latest): per-user install, no admin rights |
 | **macOS 14+** | Build from source (below), or `make dmg` for a disk image |
 
 Neither build is code-signed by a paid certificate. Windows SmartScreen: **More info → Run anyway**. macOS: **System Settings → Privacy & Security → Open Anyway**.
@@ -47,7 +47,7 @@ Neither build is code-signed by a paid certificate. Windows SmartScreen: **More 
 | Detail panel | Menu bar popover | Flyout panel |
 | Threshold notifications, once per quota window | ✅ per provider | ✅ |
 | Last reading kept and marked stale when a refresh fails | ✅ | ✅ |
-| Usage history with a chart | ✅ | — |
+| Usage history with a chart | ✅ | Not yet |
 | Launch at login | ✅ | ✅ |
 | Light / dark mode | ✅ | ✅ (+ DPI scaling) |
 
@@ -101,15 +101,15 @@ flowchart LR
 | Providers | `Providers/Claude`, `Providers/OpenAI` | `Providers/` |
 | Store / scheduling | `UsageStore`, `RefreshScheduler` | `UsageStore`, WinForms timer |
 | Alerts | `ThresholdTracker` + UserNotifications | `ThresholdTracker` + tray balloon |
-| UI | `MenuBarExtra`, Settings, History | Tray icon, `UsagePanel`, `UsageWidget`, `SettingsForm` |
+| UI | `MenuBarExtra`, Settings, History | Tray icon, `UsagePanel`, `UsageWidget`, `SettingsForm` (with credit and GitHub link) |
 
-Design decisions — lenient parsing, measured time vs read time, the two-minute request floor, never refreshing Claude Code's token — are explained in [ARCHITECTURE.md](ARCHITECTURE.md).
+Design decisions such as lenient parsing, measured time vs read time, the two-minute request floor and never refreshing Claude Code's token are explained in [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Quick start
 
 ### Windows
 
-Download and run the [installer](https://github.com/Pouya-Mansournia/QuotaBar/releases/tag/Windows-version). If Claude Code is signed in on the PC, Claude usage appears immediately; Codex appears once the Codex CLI has been used. To build from source (.NET 8 SDK):
+Download and run the [installer](https://github.com/Pouya-Mansournia/QuotaBar/releases/latest). If Claude Code is signed in on the PC, Claude usage appears immediately; Codex appears once the Codex CLI has been used. To build from source (.NET 8 SDK):
 
 ```powershell
 cd Windows
@@ -217,11 +217,11 @@ No backend, no analytics, no telemetry. The only network request is the Claude a
 
 ## Documentation
 
-- [ARCHITECTURE.md](ARCHITECTURE.md) — structure, data flow, design decisions, adding a provider
-- [Windows/README.md](Windows/README.md) — Windows build, installer and data locations
-- [SECURITY.md](SECURITY.md) — exactly what is read, written and sent
-- [TROUBLESHOOTING.md](TROUBLESHOOTING.md) — common problems
-- [CHANGELOG.md](CHANGELOG.md) — release history
+- [ARCHITECTURE.md](ARCHITECTURE.md): structure, data flow, design decisions, adding a provider
+- [Windows/README.md](Windows/README.md): Windows build, installer and data locations
+- [SECURITY.md](SECURITY.md): exactly what is read, written and sent
+- [TROUBLESHOOTING.md](TROUBLESHOOTING.md): common problems
+- [CHANGELOG.md](CHANGELOG.md): release history
 
 ## Contributing
 

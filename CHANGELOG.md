@@ -2,7 +2,13 @@
 
 All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Windows 1.0.0 — 2026-10-15
+## Windows 1.0.1 (2026-10-15)
+
+### Added
+- Settings shows the version, "Engineered by P.Mansournia" and a link to the GitHub repository.
+- The credit line in the panel opens the GitHub repository.
+
+## Windows 1.0.0 (2026-10-15)
 
 ### Added
 - Windows version (C# / .NET 8, WinForms) under `Windows/`: notification-area icon with a usage gauge, flyout panel, and a draggable, always-visible desktop widget.

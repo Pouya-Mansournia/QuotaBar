@@ -256,7 +256,13 @@ public sealed class UsagePanel : Form
         }
         y += 30;
         g.DrawString(status, smallFont, secondary, Pad, y);
-        Draw.TextRight(g, "Engineered By P.Mansournia", smallFont, secondary, PanelWidth - Pad, y);
+        // The credit opens the GitHub repository.
+        var credit = "Engineered by P.Mansournia";
+        var creditSize = g.MeasureString(credit, smallFont);
+        var creditBounds = new RectangleF(PanelWidth - Pad - creditSize.Width, y, creditSize.Width, creditSize.Height);
+        _buttons.Add((creditBounds, "credit", () => { HidePanel(); AppInfo.Open(AppInfo.RepositoryUrl); }));
+        using (var creditBrush = new SolidBrush(_hovered == "credit" ? Theme.Accent : theme.Secondary))
+            g.DrawString(credit, smallFont, creditBrush, creditBounds.X, y);
     }
 
     private PointF Logical(Point point) => new(point.X / DpiScale, point.Y / DpiScale);

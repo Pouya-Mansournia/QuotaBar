@@ -4,7 +4,7 @@
 ; Output: Windows\installer\Output\QuotaBar-Setup-<version>.exe
 
 #define AppName "QuotaBar"
-#define AppVersion "1.0.0"
+#define AppVersion "1.0.1"
 #define AppPublisher "P.Mansournia"
 #define AppExe "QuotaBar.exe"
 
