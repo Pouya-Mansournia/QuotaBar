@@ -1,0 +1,27 @@
+# Changelog
+
+All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## Windows 1.0.0 — 2026-10-15
+
+### Added
+- Windows version (C# / .NET 8, WinForms) under `Windows/`: notification-area icon with a usage gauge, flyout panel, and a draggable, always-visible desktop widget.
+- Claude usage from the Anthropic account endpoint using Claude Code's `~/.claude/.credentials.json`, or an optional PowerShell status line bridge.
+- Codex usage from local session logs.
+- Threshold notifications, launch at login, light/dark and DPI-aware rendering.
+- Per-user installer (`QuotaBar-Setup-1.0.0.exe`, Inno Setup) and xUnit tests.
+
+## macOS 1.0.2
+
+### Added
+- Guided Claude Code install in the setup window, and a credit line.
+
+## macOS 1.0.1
+
+### Added
+- First-run setup window and one-click Claude connect.
+
+## macOS 1.0.0
+
+### Added
+- Native macOS menu bar app for Claude and Codex usage: 5-hour and weekly windows, reset countdowns, notifications, usage history.

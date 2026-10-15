@@ -1,6 +1,8 @@
 # Architecture
 
-QuotaBar is a SwiftUI menu bar app (`MenuBarExtra`, macOS 14+) written in Swift 6 language mode with no third-party dependencies.
+This document describes the macOS app. The Windows port is summarised in [Windows version](#windows-version) at the end.
+
+The macOS app is a SwiftUI menu bar app (`MenuBarExtra`, macOS 14+) written in Swift 6 language mode with no third-party dependencies.
 
 ## Data flow
 
@@ -92,3 +94,25 @@ The store, cache, history, notifications, menu and the Notifications settings ta
 Tests run inside the app process. `AppEnvironment.isRunningTests` stops the hosted app from refreshing, scheduling or prompting. Everything that touches the file system takes an `AppPaths`, which tests point at a temporary directory. The bridge tests install into a temporary home and execute the real script.
 
 `ScreenshotTests` renders the menu and a settings tab with mock data into `docs/`. It is skipped unless `QUOTABAR_SCREENSHOTS` is set (`make screenshots`).
+
+## Windows version
+
+`Windows/QuotaBar.Windows` is a C# / .NET 8 WinForms port with the same data flow and rules:
+
+```text
+Core/        Models (UsageWindow, ProviderUsage, ProviderException), Lenient JSON helpers,
+             AppPaths, AppSettings, UsageStore, ThresholdTracker, Formatting
+Providers/   ClaudeUsageParser, ClaudeCredentialsFile, ClaudeAccountUsageSource,
+             ClaudeStatusLineBridge (PowerShell script), ClaudeUsageProvider, OpenAIUsageProvider
+App/         TrayApplication (composition root), UsagePanel, UsageWidget, SettingsForm,
+             TrayIconRenderer, Theme, LaunchAtLogin
+```
+
+Differences from macOS:
+
+- Claude Code's sign-in is read from `~/.claude/.credentials.json` (no Keychain on Windows), so the account source is the default.
+- The bridge script is Windows PowerShell; Claude Code runs it via its configured `statusLine` command.
+- The panel and widget are painted by hand in 96-DPI units and scaled with a transform, so they render the same at any display scaling.
+- No history chart yet; alerts use the tray balloon.
+
+The parsers, the two-minute request floor, the never-refresh rule for Claude Code's token and the threshold rules are the same as on macOS, and `QuotaBar.Windows.Tests` covers them.

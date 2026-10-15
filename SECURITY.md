@@ -76,6 +76,18 @@ Log messages pass through a redactor (bearer tokens, API-key shapes, JWTs, `toke
 
 The App Sandbox is disabled, because the app must read `~/.codex` and `~/.claude` and run the CLIs. Release builds use the Hardened Runtime.
 
-## Reporting a problem
+## Windows version
 
-Open an issue in the repository. Do not include tokens or the contents of `auth.json`.
+The Windows app (`Windows/`) follows the same rules, with these differences:
+
+- **Credential read:** Claude Code on Windows stores its sign-in in `%USERPROFILE%\.claude\.credentials.json` instead of a keychain, so there is no consent dialog and the account source is **on by default**. QuotaBar opens that file read-only and uses only `accessToken` and `expiresAt`. Turn the account source off in Settings to make the app fully local.
+- **Network:** the same single request to `https://api.anthropic.com/api/oauth/usage`, at most every two minutes, with no cookies. Nothing else uses the network.
+- **Files written:** `%APPDATA%\QuotaBar\` — `settings.json`, `notification-state.json`, and for the bridge `claude-statusline.json`, `quotabar-statusline.ps1`, `statusline-chain-command`, `statusline-original.json`. Launch at login writes one value, `QuotaBar`, under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
+- **Bridge script:** Windows PowerShell; it keeps only `rate_limits` and runs your previous status line command with the original payload. Install/Remove edit `~/.claude/settings.json` with the same backup and restore behaviour as on macOS.
+- **Installer:** per-user, no administrator rights. Uninstalling leaves `%APPDATA%\QuotaBar` in place so an installed bridge keeps working; remove the bridge in Settings first for a clean uninstall.
+
+## Reporting a vulnerability
+
+Please report security issues **privately** through [GitHub security advisories](https://github.com/Pouya-Mansournia/QuotaBar/security/advisories/new), or by email to p.mansournia@gmail.com. Do not open a public issue for them. You can expect an acknowledgement within a week.
+
+For ordinary bugs, open an issue. Never include tokens or the contents of `auth.json` or `.credentials.json`.
