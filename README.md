@@ -17,7 +17,7 @@ The screenshots show Debug-only mock data (hence the MOCK badge). They are regen
 
 ## Windows
 
-A Windows version (tray icon, flyout panel and a draggable desktop widget) lives in [Windows/](Windows/README.md). Build it with the .NET 8 SDK: `cd Windows && dotnet run --project QuotaBar.Windows`.
+A Windows version (tray icon, flyout panel and a draggable desktop widget) lives in [Windows/](Windows/README.md). **Download the installer:** [Windows/dist/QuotaBar-Setup-1.0.0.exe](Windows/dist/QuotaBar-Setup-1.0.0.exe). Build it with the .NET 8 SDK: `cd Windows && dotnet run --project QuotaBar.Windows`.
 
 ## Requirements (macOS)
 
