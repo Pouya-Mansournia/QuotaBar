@@ -2,6 +2,11 @@
 
 All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Windows 1.0.2 (2026-10-20)
+
+### Added
+- A **Reconnect** button on a provider card when its sign-in has expired or is missing. It opens a console running `claude /login` (or `codex login`) and refreshes usage when the console closes.
+
 ## Windows 1.0.1 (2026-10-15)
 
 ### Added

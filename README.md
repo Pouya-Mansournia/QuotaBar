@@ -33,7 +33,7 @@ The macOS screenshots show Debug-only mock data (hence the MOCK badge) and are r
 
 | Platform | Get it |
 | --- | --- |
-| **Windows 10 / 11** | [QuotaBar-Setup-1.0.1.exe](https://github.com/Pouya-Mansournia/QuotaBar/releases/latest): per-user install, no admin rights |
+| **Windows 10 / 11** | [QuotaBar-Setup-1.0.2.exe](https://github.com/Pouya-Mansournia/QuotaBar/releases/latest): per-user install, no admin rights |
 | **macOS 14+** | Build from source (below), or `make dmg` for a disk image |
 
 Neither build is code-signed by a paid certificate. Windows SmartScreen: **More info → Run anyway**. macOS: **System Settings → Privacy & Security → Open Anyway**.

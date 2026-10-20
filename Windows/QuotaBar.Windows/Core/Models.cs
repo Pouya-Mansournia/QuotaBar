@@ -69,7 +69,7 @@ public sealed class ProviderException : Exception
         ProviderErrorKind.CliNotInstalled => $"{detail} not installed",
         ProviderErrorKind.NotConfigured => detail,
         ProviderErrorKind.AuthenticationRequired => $"{detail} authentication unavailable",
-        ProviderErrorKind.SessionExpired => $"{detail} sign-in expired — open {detail} to renew it",
+        ProviderErrorKind.SessionExpired => $"{detail} sign-in expired — reconnect to renew it",
         ProviderErrorKind.NoUsageData => detail,
         ProviderErrorKind.PermissionDenied => "Permission denied",
         ProviderErrorKind.NetworkUnavailable => "Network unavailable",

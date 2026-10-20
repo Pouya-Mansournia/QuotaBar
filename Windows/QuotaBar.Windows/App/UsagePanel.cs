@@ -47,6 +47,7 @@ public sealed class UsagePanel : Form
     private const int HeaderHeight = 26;
     private const int WindowHeight = 50;
     private const int ErrorHeight = 36;
+    private const int ReconnectHeight = 30;
 
     private readonly UsageStore _store;
     private readonly Func<AppSettings> _settings;
@@ -55,6 +56,7 @@ public sealed class UsagePanel : Form
     private string? _hovered;
 
     public event Action? RefreshRequested;
+    public event Action<AIProvider>? ReconnectRequested;
     public event Action? SettingsRequested;
     public event Action? WidgetRequested;
     public event Action? QuitRequested;
@@ -148,9 +150,14 @@ public sealed class UsagePanel : Form
         float height = 8 + HeaderHeight;
         if (snapshot.Usage is { } usage) height += usage.Windows.Count * WindowHeight;
         if (snapshot.LastError is not null) height += ErrorHeight;
+        if (NeedsReconnect(snapshot)) height += ReconnectHeight;
         else if (snapshot.Usage is null) height += 22;
         return height + 4;
     }
+
+    /// Sign-in problems are fixed by signing in again, so the card offers it.
+    private static bool NeedsReconnect(ProviderSnapshot snapshot) =>
+        snapshot.LastError?.Kind is ProviderErrorKind.SessionExpired or ProviderErrorKind.AuthenticationRequired;
 
     protected override void OnPaint(PaintEventArgs e)
     {
@@ -222,6 +229,20 @@ public sealed class UsagePanel : Form
             {
                 using var errorBrush = new SolidBrush(snapshot.Usage is null ? theme.Text : Theme.Warning);
                 g.DrawString(error.Message, smallFont, errorBrush, new RectangleF(x, rowY, right - x, ErrorHeight));
+                rowY += ErrorHeight;
+                if (NeedsReconnect(snapshot))
+                {
+                    var label = "Reconnect";
+                    var key = $"reconnect-{provider}";
+                    var size = g.MeasureString(label, bodyFont);
+                    var bounds = new RectangleF(x, rowY, size.Width + 20, 24);
+                    var target = provider;
+                    _buttons.Add((bounds, key, () => { HidePanel(); ReconnectRequested?.Invoke(target); }));
+                    using var buttonPath = Theme.RoundedRectangle(bounds, 4);
+                    using var buttonBrush = new SolidBrush(_hovered == key ? ControlPaint.Dark(Theme.Accent, 0.1f) : Theme.Accent);
+                    g.FillPath(buttonBrush, buttonPath);
+                    g.DrawString(label, bodyFont, Brushes.White, bounds.X + 10, bounds.Y + (bounds.Height - size.Height) / 2);
+                }
             }
             else if (snapshot.Usage is null)
             {

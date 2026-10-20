@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using QuotaBar.Core;
 using QuotaBar.Providers;
 
@@ -34,6 +35,7 @@ public sealed class TrayApplication : ApplicationContext
 
         _panel = new UsagePanel(_store, () => _settings);
         _panel.RefreshRequested += () => _ = RefreshAsync();
+        _panel.ReconnectRequested += Reconnect;
         _panel.SettingsRequested += () => ShowSettings(firstRun: false);
         _panel.QuitRequested += Quit;
         _panel.WidgetRequested += () => SetWidgetVisible(!_settings.ShowWidget);
@@ -88,6 +90,28 @@ public sealed class TrayApplication : ApplicationContext
     }
 
     private Task RefreshAsync() => _store.RefreshAsync();
+
+    /// Opens a console that signs the CLI in again, then refreshes once it closes.
+    /// QuotaBar never handles the login itself; the CLI owns its credentials.
+    private void Reconnect(AIProvider provider)
+    {
+        var command = provider == AIProvider.Claude
+            ? "echo Sign in to Claude Code, then close this window to update QuotaBar. & claude /login"
+            : "echo Sign in to Codex; this window closes when done. & codex login";
+        try
+        {
+            var process = Process.Start(new ProcessStartInfo("cmd.exe", $"/c \"{command}\"") { UseShellExecute = true });
+            if (process is null) return;
+            process.EnableRaisingEvents = true;
+            process.Exited += (_, _) => _ui.BeginInvoke(() => _ = RefreshAsync());
+        }
+        catch (Exception)
+        {
+            MessageBox.Show(
+                provider == AIProvider.Claude ? "Could not start Claude Code. Run \"claude /login\" in a terminal." : "Could not start Codex. Run \"codex login\" in a terminal.",
+                "QuotaBar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+    }
 
     private void ApplySchedule()
     {
