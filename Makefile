@@ -9,6 +9,12 @@ XCODEBUILD := xcodebuild -project QuotaBar.xcodeproj -scheme QuotaBar -derivedDa
 RELEASE_APP := $(DERIVED)/Build/Products/Release/QuotaBar.app
 DEBUG_APP := $(DERIVED)/Build/Products/Debug/QuotaBar.app
 
+# Ad hoc signatures change on every build, so macOS forgets "Always Allow" for
+# the Keychain and asks for the login password again. Set SIGN_IDENTITY (for
+# example in your shell profile) to re-sign local installs with a stable
+# identity: SIGN_IDENTITY="Apple Development: you@example.com (TEAMID)"
+SIGN_IDENTITY ?=
+
 .PHONY: build release test run install screenshots icon clean
 
 build:
@@ -29,6 +35,7 @@ install: release
 	-pkill -x QuotaBar
 	rm -rf /Applications/QuotaBar.app
 	cp -R $(RELEASE_APP) /Applications/QuotaBar.app
+	$(if $(SIGN_IDENTITY),codesign --force --preserve-metadata=entitlements --options runtime -s "$(SIGN_IDENTITY)" /Applications/QuotaBar.app)
 	open /Applications/QuotaBar.app
 
 screenshots:
