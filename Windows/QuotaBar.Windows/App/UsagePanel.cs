@@ -177,6 +177,7 @@ public sealed class UsagePanel : Form
 
         float y = Pad;
         g.DrawString("QuotaBar", titleFont, text, Pad, y);
+        Draw.TextRight(g, $"v{AppInfo.Version}", smallFont, secondary, PanelWidth - Pad, y + 3);
         y += 30;
 
         var providers = ShownProviders();

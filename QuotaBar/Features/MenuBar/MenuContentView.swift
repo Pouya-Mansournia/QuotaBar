@@ -29,6 +29,10 @@ struct MenuContentView: View {
                         .foregroundStyle(.orange)
                 }
                 Spacer()
+                Text("v\(AppVersion.current)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("QuotaBar version \(AppVersion.current)")
                 if store.isRefreshing {
                     ProgressView()
                         .controlSize(.small)
@@ -126,6 +130,10 @@ struct MenuContentView: View {
 
 enum AppCredit {
     static let text = "Engineered By P.Mansournia"
+}
+
+enum AppVersion {
+    static let current = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
 }
 
 /// A full-width button that highlights on hover, like a menu item.
