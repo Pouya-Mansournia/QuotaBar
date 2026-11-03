@@ -132,7 +132,7 @@ make install    # build Release, copy to /Applications, launch
 make dmg        # build QuotaBar-<version>.dmg
 ```
 
-Or open `QuotaBar.xcodeproj` and press Run. The Makefile uses `/Applications/Xcode.app` even if `xcode-select` points at the Command Line Tools; override with `DEVELOPER_DIR=…`. The app is signed ad hoc ("Sign to Run Locally"), so no Apple developer account is needed.
+Or open `QuotaBar.xcodeproj` and press Run. The Makefile uses `/Applications/Xcode.app` even if `xcode-select` points at the Command Line Tools; override with `DEVELOPER_DIR=…`. If exactly one local code-signing certificate is available, `make run`, `make install`, and `make dmg` use it so macOS can remember **Always Allow** for Claude Code's Keychain item across builds. With multiple certificates, set `SIGN_IDENTITY` to the desired certificate's hash. Without one, builds remain signed ad hoc ("Sign to Run Locally"). Xcode's Run button uses the Xcode target's signing settings instead.
 
 <details>
 <summary>Installing from the macOS disk image</summary>
@@ -153,7 +153,7 @@ To ship without that step, set your team in the target's Signing settings, sign 
 
 **Claude** has two sources (switch in **Settings**):
 
-- **Anthropic account source.** Shows the same numbers as Claude Code's Account & Usage panel and works with the VS Code extension. On macOS the first launch offers **Connect Claude**, and macOS asks once to let QuotaBar read Claude Code's sign-in from the Keychain. On Windows it is the default and needs no prompt.
+- **Anthropic account source.** Shows the same numbers as Claude Code's Account & Usage panel and works with the VS Code extension. On macOS the first launch offers **Connect Claude**. Choose **Always Allow** in the macOS Keychain dialog; a stable code signature lets macOS remember this choice. macOS controls that dialog, so QuotaBar cannot switch its password prompt to Touch ID. On Windows it is the default and needs no prompt.
 - **Status line bridge → Install.** No credentials and no network, but it updates only while Claude Code runs in a terminal. Send one message there after installing.
 
 To start automatically, turn on **Launch at login** (on macOS, run `make install` first so the app has a stable location).
