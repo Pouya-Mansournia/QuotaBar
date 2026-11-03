@@ -54,6 +54,8 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueName: 
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Launch QuotaBar"; Flags: nowait postinstall skipifsilent
+; Silent updates relaunch the app after replacing the executable.
+Filename: "{app}\{#AppExe}"; Flags: nowait; Check: WizardSilent
 
 ; %APPDATA%\QuotaBar is left in place on uninstall: if the Claude status line
 ; bridge is installed, Claude Code's settings.json points at the script there.

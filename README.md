@@ -130,9 +130,12 @@ make test       # unit tests
 make run        # build Debug and launch
 make install    # build Release, copy to /Applications, launch
 make dmg        # build QuotaBar-<version>.dmg
+make zip        # build the signed ZIP used by automatic updates
 ```
 
 Or open `QuotaBar.xcodeproj` and press Run. The Makefile uses `/Applications/Xcode.app` even if `xcode-select` points at the Command Line Tools; override with `DEVELOPER_DIR=…`. If exactly one local code-signing certificate is available, `make run`, `make install`, and `make dmg` use it so macOS can remember **Always Allow** for Claude Code's Keychain item across builds. With multiple certificates, set `SIGN_IDENTITY` to the desired certificate's hash. Without one, builds remain signed ad hoc ("Sign to Run Locally"). Xcode's Run button uses the Xcode target's signing settings instead.
+
+Installed macOS copies check GitHub Releases at launch and every six hours. A newer release auto-installs when it includes `QuotaBar-macOS-<version>.zip`, the ZIP has GitHub's reported SHA-256 digest, the app has the same Team ID as the installed app, and `/Applications` is writable by the user. Build the ZIP with `make zip` using the same signing team for every release, then upload it to the Release alongside the Windows installer with `gh release upload Windows-v<version> QuotaBar-macOS-<version>.zip`. An ad hoc signed app or a non-writable installation cannot replace itself automatically. Existing installations need this updater version installed once before subsequent releases can update themselves.
 
 <details>
 <summary>Installing from the macOS disk image</summary>
@@ -206,7 +209,7 @@ QuotaBar/
 
 ## Privacy and security
 
-No backend, no analytics, no telemetry. The only network request is the Claude account source described above. Credentials are read-only and never written to disk or logs. Every file QuotaBar reads and writes is listed in [SECURITY.md](SECURITY.md). Report vulnerabilities privately through [GitHub security advisories](https://github.com/Pouya-Mansournia/QuotaBar/security/advisories/new).
+No backend, no analytics, no telemetry. Installed copies check GitHub Releases for updates; the optional Claude account source makes the Anthropic request described above. Credentials are read-only and never written to disk or logs. Every file QuotaBar reads and writes is listed in [SECURITY.md](SECURITY.md). Report vulnerabilities privately through [GitHub security advisories](https://github.com/Pouya-Mansournia/QuotaBar/security/advisories/new).
 
 ## Limitations
 

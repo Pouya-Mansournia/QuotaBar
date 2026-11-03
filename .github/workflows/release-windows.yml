@@ -1,0 +1,43 @@
+name: Release Windows
+
+on:
+  push:
+    tags:
+      - 'Windows-v*'
+
+permissions:
+  contents: write
+
+jobs:
+  installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Check version matches tag
+        shell: pwsh
+        run: |
+          $version = '${{ github.ref_name }}'.Substring(9)
+          $project = [xml](Get-Content Windows/QuotaBar.Windows/QuotaBar.Windows.csproj)
+          $installer = Get-Content Windows/installer/QuotaBar.iss -Raw
+          if ($project.Project.PropertyGroup.Version -ne $version -or $installer -notmatch [regex]::Escape("#define AppVersion `"$version`"")) {
+            throw "The app and installer versions must both match $version"
+          }
+      - name: Test
+        run: dotnet test Windows/QuotaBar.Windows.sln -c Release
+      - name: Publish executable
+        run: dotnet publish Windows/QuotaBar.Windows -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o Windows/publish
+      - name: Build installer
+        shell: pwsh
+        run: |
+          choco install innosetup --no-progress -y
+          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' Windows\installer\QuotaBar.iss
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $installer = (Get-ChildItem Windows/installer/Output/QuotaBar-Setup-*.exe | Select-Object -First 1).FullName
+          gh release create '${{ github.ref_name }}' $installer --title "QuotaBar for Windows $($env:GITHUB_REF_NAME.Substring(9))" --generate-notes

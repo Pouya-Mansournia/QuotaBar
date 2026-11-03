@@ -1,10 +1,10 @@
 # Security
 
-QuotaBar has no backend, no account of its own, no analytics, and no telemetry. By default it is local-only. One optional setting, off by default, reads a credential and makes a network request; it is described first.
+QuotaBar has no backend, no account of its own, no analytics, and no telemetry. Installed copies check GitHub Releases for updates; the optional Claude account source reads a credential and makes a separate network request.
 
 ## The optional Anthropic account source
 
-**Settings → Claude → Read usage from my Anthropic account** is off by default. With it off, QuotaBar reads no credentials and makes no network requests.
+**Settings → Claude → Read usage from my Anthropic account** is off by default. With it off, QuotaBar reads no credentials and makes no requests to Anthropic.
 
 With it on:
 
@@ -20,7 +20,7 @@ The code is in `KeychainReader.swift` and `ClaudeAccountUsageSource.swift`. Unit
 
 ## Network requests
 
-Only the request above, and only when that setting is on. Nothing else in the app uses the network.
+Installed copies check `https://api.github.com/repos/Pouya-Mansournia/QuotaBar/releases/latest` at launch and every six hours. A macOS update downloads a ZIP from the matching Release, checks its length and SHA-256 digest against the API response, then verifies its code signature and Team ID before replacing a writable `/Applications/QuotaBar.app`. The Anthropic request above is separate and only occurs when that setting is on. Windows update behavior is described below.
 
 Two macOS services are used and behave as they do for any app: UserNotifications (local alerts) and ServiceManagement (the login item).
 
@@ -43,7 +43,7 @@ QuotaBar stores no credentials of its own.
 
 ## Files written
 
-Everything QuotaBar creates is in `~/Library/Application Support/QuotaBar`:
+QuotaBar's usage and settings files are in `~/Library/Application Support/QuotaBar`:
 
 | File | Contents |
 | --- | --- |
@@ -52,6 +52,8 @@ Everything QuotaBar creates is in `~/Library/Application Support/QuotaBar`:
 | `notification-state.json` | Which alert thresholds have fired in the current window |
 | `claude-statusline.json` | The `rate_limits` object from Claude Code |
 | `quotabar-statusline.sh`, `statusline-chain-command`, `statusline-original.json` | The bridge script and your previous status line, kept for restore |
+
+During a macOS update, QuotaBar temporarily writes the downloaded ZIP and extracted app under the system temporary directory, copies the verified app into `/Applications`, and removes the temporary files.
 
 Preferences are in UserDefaults (`com.pouya.QuotaBar`) and hold no secrets.
 
@@ -80,11 +82,12 @@ The App Sandbox is disabled, because the app must read `~/.codex` and `~/.claude
 
 The Windows app (`Windows/`) follows the same rules, with these differences:
 
-- **Credential read:** Claude Code on Windows stores its sign-in in `%USERPROFILE%\.claude\.credentials.json` instead of a keychain, so there is no consent dialog and the account source is **on by default**. QuotaBar opens that file read-only and uses only `accessToken` and `expiresAt`. Turn the account source off in Settings to make the app fully local.
-- **Network:** the same single request to `https://api.anthropic.com/api/oauth/usage`, at most every two minutes, with no cookies. Nothing else uses the network.
+- **Credential read:** Claude Code on Windows stores its sign-in in `%USERPROFILE%\.claude\.credentials.json` instead of a keychain, so there is no consent dialog and the account source is **on by default**. QuotaBar opens that file read-only and uses only `accessToken` and `expiresAt`.
+- **Network:** the account source requests `https://api.anthropic.com/api/oauth/usage` at most every two minutes, with no cookies. Installed copies also request `https://api.github.com/repos/Pouya-Mansournia/QuotaBar/releases/latest` at startup and every six hours. For a newer release, they download the installer from the matching GitHub Release URL and verify its length and SHA-256 digest against the GitHub API response before running it. Portable copies do not check for updates.
 - **Files written:** `%APPDATA%\QuotaBar\`: `settings.json`, `notification-state.json`, and for the bridge `claude-statusline.json`, `quotabar-statusline.ps1`, `statusline-chain-command`, `statusline-original.json`. Launch at login writes one value, `QuotaBar`, under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
 - **Bridge script:** Windows PowerShell; it keeps only `rate_limits` and runs your previous status line command with the original payload. Install/Remove edit `~/.claude/settings.json` with the same backup and restore behaviour as on macOS.
 - **Installer:** per-user, no administrator rights. Uninstalling leaves `%APPDATA%\QuotaBar` in place so an installed bridge keeps working; remove the bridge in Settings first for a clean uninstall.
+- **Update files:** the verified installer is saved temporarily under `%TEMP%` and run from there. Windows may retain that installer file until temporary files are cleaned up.
 
 ## Reporting a vulnerability
 

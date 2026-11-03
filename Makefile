@@ -52,7 +52,7 @@ clean:
 VERSION := $(shell sed -n 's/.*MARKETING_VERSION = \(.*\);/\1/p' QuotaBar.xcodeproj/project.pbxproj | head -1)
 DMG := QuotaBar-$(VERSION).dmg
 
-.PHONY: dmg
+.PHONY: dmg zip
 dmg: release
 	rm -rf build/dmg $(DMG)
 	mkdir -p build/dmg
@@ -61,3 +61,11 @@ dmg: release
 	hdiutil create -volname QuotaBar -srcfolder build/dmg -ov -format UDZO $(DMG)
 	rm -rf build/dmg
 	@echo "Created $(DMG)"
+
+# Upload this ZIP to the same GitHub Release as the Windows installer. The
+# updater requires a stable signing identity, so SIGN_IDENTITY must be set.
+zip:
+	@test -n "$(SIGN_IDENTITY)" || (echo "A code-signing identity is required for macOS updates" >&2; exit 1)
+	$(MAKE) release SIGN_IDENTITY="$(SIGN_IDENTITY)"
+	rm -f QuotaBar-macOS-$(VERSION).zip
+	ditto -c -k --keepParent $(RELEASE_APP) QuotaBar-macOS-$(VERSION).zip

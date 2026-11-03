@@ -35,6 +35,8 @@ ISCC.exe Windows\installer\QuotaBar.iss
 
 The installer is not code-signed, so SmartScreen may show "Windows protected your PC" the first time: click **More info → Run anyway**.
 
+Installed copies check the latest GitHub Release at launch and every six hours. When a newer `QuotaBar-Setup-<version>.exe` is published, QuotaBar downloads it, verifies the SHA-256 digest and file size from GitHub's release API, runs the installer silently, and relaunches. Portable copies do not auto-update. Windows may still show a SmartScreen warning because the installer is unsigned. To publish an update, set the same version in the project and Inno Setup script, then push a `Windows-v<version>` tag; the release workflow builds and uploads the installer.
+
 ## Data sources
 
 **Claude, account source (default).** On Windows, Claude Code keeps its sign-in in `%USERPROFILE%\.claude\.credentials.json` instead of a keychain, so no permission dialog is needed. QuotaBar reads the access token from that file and sends one GET request to `https://api.anthropic.com/api/oauth/usage`, at most every two minutes. The token goes nowhere else, is never written or logged, and is never refreshed by QuotaBar (Claude Code renews it itself). Works with the VS Code extension too. The endpoint is not officially documented, so an unrecognised response is shown as "Unsupported provider response", never as a guess.

@@ -4,6 +4,7 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 *.dmg
+QuotaBar-macOS-*.zip
 
 # Windows (.NET)
 Windows/**/bin/

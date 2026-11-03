@@ -18,6 +18,7 @@ public sealed class TrayApplication : ApplicationContext
     private readonly UsageWidget _widget;
     private readonly ToolStripMenuItem _widgetItem;
     private readonly System.Windows.Forms.Timer _timer = new();
+    private readonly ReleaseUpdater _updater;
     private readonly Control _ui = new();
     private SettingsForm? _settingsForm;
     private DateTime _panelHiddenAt;
@@ -32,6 +33,8 @@ public sealed class TrayApplication : ApplicationContext
             [new ClaudeUsageProvider(_paths, _bridge, _accountSource, () => _settings.ClaudeSource), new OpenAIUsageProvider(_paths)],
             provider => provider == AIProvider.Claude ? _settings.ClaudeEnabled : _settings.CodexEnabled);
         _ui.CreateControl();
+        _updater = new ReleaseUpdater();
+        _updater.InstallerStarted += () => _ui.BeginInvoke(Quit);
 
         _panel = new UsagePanel(_store, () => _settings);
         _panel.RefreshRequested += () => _ = RefreshAsync();
@@ -273,6 +276,7 @@ public sealed class TrayApplication : ApplicationContext
         {
             _tray.Dispose();
             _timer.Dispose();
+            _updater.Dispose();
             _panel.Dispose();
             _widget.Dispose();
             _ui.Dispose();

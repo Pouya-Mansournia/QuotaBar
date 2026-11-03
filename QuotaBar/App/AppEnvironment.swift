@@ -16,6 +16,7 @@ final class AppEnvironment {
     @ObservationIgnored let notifications = NotificationManager()
     @ObservationIgnored let launchAtLogin = LaunchAtLogin()
     @ObservationIgnored private let scheduler = RefreshScheduler()
+    @ObservationIgnored private let releaseUpdater = ReleaseUpdater()
 
     /// Unit tests are hosted by the app; they must not trigger real refreshes,
     /// notification prompts or timers.
@@ -59,6 +60,7 @@ final class AppEnvironment {
         AppLog.shared.setDebugEnabled(settings.debugLogging)
         observeSettings()
         reschedule()
+        releaseUpdater.start()
         // Separate task: the permission prompt waits for the user and must not
         // hold up the first refresh.
         Task {
