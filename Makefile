@@ -69,3 +69,11 @@ zip:
 	$(MAKE) release SIGN_IDENTITY="$(SIGN_IDENTITY)"
 	rm -f QuotaBar-macOS-$(VERSION).zip
 	ditto -c -k --keepParent $(RELEASE_APP) QuotaBar-macOS-$(VERSION).zip
+
+# Build the macOS disk image (and the updater ZIP when a signing identity is
+# available) and attach them to the GitHub Release v$(VERSION).
+.PHONY: publish-mac
+publish-mac: dmg
+	$(if $(SIGN_IDENTITY),$(MAKE) zip SIGN_IDENTITY="$(SIGN_IDENTITY)",@echo "No signing identity: skipping updater ZIP")
+	gh release view v$(VERSION) >/dev/null 2>&1 || gh release create v$(VERSION) --title "QuotaBar for macOS $(VERSION)" --generate-notes
+	gh release upload v$(VERSION) $(DMG) $(if $(SIGN_IDENTITY),QuotaBar-macOS-$(VERSION).zip) --clobber
